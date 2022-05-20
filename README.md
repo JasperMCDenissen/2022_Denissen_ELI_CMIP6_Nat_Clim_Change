@@ -1,19 +1,19 @@
-2022-01-13
+2022-05-20
 by: Jasper Denissen
-
-[![DOI](https://zenodo.org/badge/452419867.svg)](https://zenodo.org/badge/latestdoi/452419867)
 
 This is a text message describing the use of all the files included in this directory for the paper "Widespread shift from ecosystem energy to water limitation with climate change", Denissen et al., 2022.
 
 This main directory should have 4 subfolders:
-- Data: This can be downloaded from xxxzenodoxxx
-- RData: This can be downloaded from xxxzenodoxxx
-- Figures: A folder with the original paper figures.
-- testdir: An empty folder meant for output of all scripts.
+Data: This can be downloaded from https://doi.org/10.5281/zenodo.6566274![image](https://user-images.githubusercontent.com/98480797/169529723-e72407c1-7ee2-4b11-80f4-5e8fbe5f1589.png)
+
+RData: This can be downloaded from https://doi.org/10.5281/zenodo.6566274![image](https://user-images.githubusercontent.com/98480797/169529726-0249be58-5981-4b26-a567-ddae29c5db74.png)
+
+Figures: A folder with the original paper figures.
+testdir: An empty folder meant for output of all scripts.
 
 Any .R script can be executed by opening R from the terminal by simply typing 'R' in the command prompt. In R, execute 'source('name_script.R')'. All the output paths have been set to write to testdir/. If the complete collection of scripts is to be tested, with intermediate .RData files in between, the input paths should be changed accordingly (from RData/ to testdir/). Any warning messages can be ignored.
 
-[NOTE] It is not necessary to download and aggregate the CMIP6 runs and pre-process the data, the paper figures can be made directly in [3]. 
+- [NOTE] It is not necessary to download and aggregate the CMIP6 runs and pre-process the data, the paper figures can be made directly in [3]. 
 - [0] states the R environment originally used.
 - [1] download and aggregate the CMIP6 runs
 - [2] Data pre-processing for plot figures
@@ -71,13 +71,15 @@ Scripts/
 [3] Making the paper figures
 All the original paper figures can be found here:
 
-With the following scripts one can remake all the original paper and supplementary material figures (Fig 1-4 and SFig 1-18):
+With the following scripts one can remake all the original paper and supplementary material figures (Fig 1-4 and SFig 1-20):
 
 Scripts/
-- 1_global_time_series.R                            # Script to make Figure 1 and SFig 1-6
-- 2_glob_spat_cmip6_mean.R                          # Script to make Figure 2 and SFig 7-12
+- 1_global_time_series.R                            # Script to make Figure 1 and SFig 1-7
+- 2_glob_spat_cmip6_mean.R                          # Script to make Figure 2 and SFig 8-13
 - 3_seascycle_dcorr_mean.R                          # Script to make Figure 3
-- 4_attr_mean.R                                     # Script to make Figure 4 and SFig 13 and 16
-- croptreeFrac.R                                    # Script to make SFig 14
-- 4_attr_per_member_id.R                            # Script to make SFig 15 (This script may take +/- 2 hours to run through)
-- dry_wet_example_ELI.R                             # Script to make SFig 17 and 18
+- 4_attr_mean.R                                     # Script to make Figure 4 and SFig 14 and 17
+- croptreeFrac.R                                    # Script to make SFig 15
+- 4_attr_per_member_id.R                            # Script to make SFig 16 (This script may take +/- 2 hours to run through)
+- dry_wet_example_ELI.R                             # Script to make SFig 18 and 19
+- simple_model_5yr.R                                # Script to make SFig20
+
