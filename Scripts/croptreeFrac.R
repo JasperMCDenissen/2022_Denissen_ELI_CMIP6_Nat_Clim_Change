@@ -17,37 +17,35 @@ source('Scripts/functions/plot_discrete_cbar.R')
 
 # from /RData
 load('RData/202106_cmip6_no_evspsblveg_hurs.RData')
-load('RData/202112_dcorr_cmip6_10yr_no_evspsblveg_hurs.RData')
+load('RData/202112_dcorr_cmip6_10yr_no_evspsblveg_hurs_netrad.RData')
 load('RData/total_land_area.RData')
 load('RData/202106_cmip6_frac.RData')
 # # from /testdir
 # load('testdir/202106_cmip6_no_evspsblveg_hurs.RData')
-# load('testdir/202112_dcorr_cmip6_10yr_no_evspsblveg_hurs.RData')
+# load('testdir/202112_dcorr_cmip6_10yr_no_evspsblveg_hurs_netrad.RData')
 # load('testdir/total_land_area.RData')
 # load("testdir/202106_cmip6_frac.RData")
 
-# dcorr.list[[8]] <- dcorr_MPI
-dcorr.list <- list(dcorr.list[[10]], dcorr.list[[9]], dcorr.list[[11]], dcorr.list[[2]],
+dcorr.list <- list(dcorr.list[[9]], dcorr.list[[8]], dcorr.list[[10]], dcorr.list[[2]],
                    dcorr.list[[4]], dcorr.list[[6]])
-av_tas.list <- list(av_tas.list[[10]], av_tas.list[[9]], av_tas.list[[11]], av_tas.list[[2]],
+av_tas.list <- list(av_tas.list[[9]], av_tas.list[[8]], av_tas.list[[10]], av_tas.list[[2]],
                     av_tas.list[[4]], av_tas.list[[6]])
-av_mrso.list <- list(av_mrso.list[[10]], av_mrso.list[[9]], av_mrso.list[[11]], av_mrso.list[[2]],
+av_mrso.list <- list(av_mrso.list[[9]], av_mrso.list[[8]], av_mrso.list[[10]], av_mrso.list[[2]],
                      av_mrso.list[[4]], av_mrso.list[[6]])
-av_hfls.list <- list(av_hfls.list[[10]], av_hfls.list[[9]], av_hfls.list[[11]], av_hfls.list[[2]],
+av_hfls.list <- list(av_hfls.list[[9]], av_hfls.list[[8]], av_hfls.list[[10]], av_hfls.list[[2]],
                      av_hfls.list[[4]], av_hfls.list[[6]])
-av_lai.list <- list(av_lai.list[[10]], av_lai.list[[9]], av_lai.list[[11]], av_lai.list[[2]],
+av_lai.list <- list(av_lai.list[[9]], av_lai.list[[8]], av_lai.list[[10]], av_lai.list[[2]],
                     av_lai.list[[4]], av_lai.list[[6]])
-av_rsds.list <- list(av_rsds.list[[10]], av_rsds.list[[9]], av_rsds.list[[11]], av_rsds.list[[2]],
+av_rsds.list <- list(av_rsds.list[[9]], av_rsds.list[[8]], av_rsds.list[[10]], av_rsds.list[[2]],
                      av_rsds.list[[4]], av_rsds.list[[6]])
-av_rsus.list <- list(av_rsus.list[[10]], av_rsus.list[[9]], av_rsus.list[[11]], av_rsus.list[[2]],
+av_rsus.list <- list(av_rsus.list[[9]], av_rsus.list[[8]], av_rsus.list[[10]], av_rsus.list[[2]],
                      av_rsus.list[[4]], av_rsus.list[[6]])
-av_rlds.list <- list(av_rlds.list[[10]], av_rlds.list[[9]], av_rlds.list[[11]], av_rlds.list[[2]],
+av_rlds.list <- list(av_rlds.list[[9]], av_rlds.list[[8]], av_rlds.list[[10]], av_rlds.list[[2]],
                      av_rlds.list[[4]], av_rlds.list[[6]])
-av_rlus.list <- list(av_rlus.list[[10]], av_rlus.list[[9]], av_rlus.list[[11]], av_rlus.list[[2]],
+av_rlus.list <- list(av_rlus.list[[9]], av_rlus.list[[8]], av_rlus.list[[10]], av_rlus.list[[2]],
                      av_rlus.list[[4]], av_rlus.list[[6]])
-av_pr.list <- list(av_pr.list[[10]], av_pr.list[[9]], av_pr.list[[11]], av_pr.list[[2]],
+av_pr.list <- list(av_pr.list[[9]], av_pr.list[[8]], av_pr.list[[10]], av_pr.list[[2]],
                    av_pr.list[[4]], av_pr.list[[6]])
-
 
 lon <- seq(-179,179,2)
 lat <- seq(-89,89,2)
@@ -132,7 +130,7 @@ for(i in seq(1,(6*12),12)){
   count_i <- count_i + 1
 }
 
-mmmean_dcorr_per_10yr <- mmmean_tas_per_10yr <- 
+mmmean_dcorr_per_10yr <- mmmean_tas_per_10yr <- mmmean_netrad_per_10yr <- 
   mmmean_mrso_per_10yr <- mmmean_hfls_per_10yr <- 
   mmmean_lai_per_10yr <- mmmean_ar_per_10yr <- 
   mmmean_cropFrac_per_10yr <- mmmean_treeFrac_per_10yr <- 
@@ -145,6 +143,7 @@ for(i in 1:12){
         if(models_with_full_timeseries[x,y] > 4){
           mmmean_dcorr_per_10yr[x,y,i] <- mean(dcorr_all.array[x,y,(index_per_10yr+i)],na.rm=T)
           mmmean_tas_per_10yr[x,y,i] <- mean(av_tas.array[x,y,(index_per_10yr+i)],na.rm=T)
+          mmmean_netrad_per_10yr[x,y,i] <- mean(av_rnet.array[x,y,(index_per_10yr+i)],na.rm=T)
           mmmean_mrso_per_10yr[x,y,i] <- mean(av_mrso.array[x,y,(index_per_10yr+i)],na.rm=T)
           mmmean_hfls_per_10yr[x,y,i] <- mean(av_hfls.array[x,y,(index_per_10yr+i)],na.rm=T)
           mmmean_lai_per_10yr[x,y,i] <- mean(av_lai.array[x,y,(index_per_10yr+i)],na.rm=T)
@@ -157,7 +156,7 @@ for(i in 1:12){
   }
 }
 
-mmmean_kendall_dcorr <- mmmean_kendall_tas <- mmmean_kendall_hfls <-
+mmmean_kendall_dcorr <- mmmean_kendall_netrad <- mmmean_kendall_hfls <-
   mmmean_kendall_mrso <- mmmean_kendall_lai <- mmmean_kendall_ar <- array(NaN,c(180,90,2)) # 2: slope (all) & p.value (all)
 sum_blocks <- array(NaN,c(180,90))
 for(x in 1:180){
@@ -165,7 +164,7 @@ for(x in 1:180){
     if(sum(!is.na(mmmean_dcorr_per_10yr[x,y,])) == 12){
       sum_blocks[x,y] <- sum(!is.na(mmmean_dcorr_per_10yr[x,y,]))
       mmmean_kendall_dcorr[x,y,] <- c(unname(kendallTrendTest(mmmean_dcorr_per_10yr[x,y,])$estimate[2]), unname(kendallTrendTest(mmmean_dcorr_per_10yr[x,y,])$p.value))
-      mmmean_kendall_tas[x,y,] <- c(unname(kendallTrendTest(mmmean_tas_per_10yr[x,y,])$estimate[2]), unname(kendallTrendTest(mmmean_tas_per_10yr[x,y,])$p.value))
+      mmmean_kendall_netrad[x,y,] <- c(unname(kendallTrendTest(mmmean_netrad_per_10yr[x,y,])$estimate[2]), unname(kendallTrendTest(mmmean_netrad_per_10yr[x,y,])$p.value))
       mmmean_kendall_mrso[x,y,] <- c(unname(kendallTrendTest(mmmean_mrso_per_10yr[x,y,])$estimate[2]), unname(kendallTrendTest(mmmean_mrso_per_10yr[x,y,])$p.value))
       mmmean_kendall_hfls[x,y,] <- c(unname(kendallTrendTest(mmmean_hfls_per_10yr[x,y,])$estimate[2]), unname(kendallTrendTest(mmmean_hfls_per_10yr[x,y,])$p.value))
       mmmean_kendall_lai[x,y,] <- c(unname(kendallTrendTest(mmmean_lai_per_10yr[x,y,])$estimate[2]), unname(kendallTrendTest(mmmean_lai_per_10yr[x,y,])$p.value))
@@ -175,7 +174,7 @@ for(x in 1:180){
 }
 
 options(na.action = "na.fail")
-vars <- c("tas","mrso","hfls","lai","ar","cropFrac","treeFrac","adj. R2 < 0.5")
+vars <- c("netrad","mrso","hfls","lai","ar","cropFrac","treeFrac","adj. R2 < 0.5")
 dom_var_dredge_relimp <- array(NaN,c(180,90,2))
 dom_var_dredge_relimp_all <- array(0,c(180,90,7))
 adj_R2_dredge_relimp <- array(NaN,c(180,90))
@@ -187,7 +186,7 @@ for(x in 1:180){
       rsq.vec <- c()
       # dredge: automated model selection
       lm_dcorr.df <- lm(mmmean_dcorr_per_10yr[x,y,] ~
-                          mmmean_tas_per_10yr[x,y,] + mmmean_mrso_per_10yr[x,y,] + mmmean_hfls_per_10yr[x,y,] +
+                          mmmean_netrad_per_10yr[x,y,] + mmmean_mrso_per_10yr[x,y,] + mmmean_hfls_per_10yr[x,y,] +
                           mmmean_lai_per_10yr[x,y,] + mmmean_ar_per_10yr[x,y,] + 
                           mmmean_cropFrac_per_10yr[x,y,] + mmmean_treeFrac_per_10yr[x,y,])
       dd <- dredge(lm_dcorr.df, extra = list(AIC))
@@ -350,7 +349,7 @@ a <- ggplot(dom_var_ts.df, aes(x=lon,y=lat,fill=cuts_dom_var_dredge_relimp)) +
   geom_segment(data = hotspot_regs.df, inherit.aes = F, aes(x = x, y = y, xend = xend, yend = yend), lty = 'dashed') +
   scale_fill_manual("Dominant variable",
                     values = cols_dom_var, 
-                    labels = c("Temperature","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index","Crop fraction","Tree fraction",expression("adjusted R"^2*" < 0.5")),
+                    labels = c("Net surface radiation","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index","Crop fraction","Tree fraction",expression("adjusted R"^2*" < 0.5")),
                     drop = F) +
   scale_x_continuous("longitude",
                      limits=c(-180,180),

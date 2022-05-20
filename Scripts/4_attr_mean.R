@@ -22,43 +22,12 @@ source('Scripts/to_be_loaded_packages.R')
 
 # from /RData
 load('RData/202106_cmip6_no_evspsblveg_hurs.RData')
-load('RData/202112_dcorr_cmip6_10yr_no_evspsblveg_hurs.RData')
+load('RData/202112_dcorr_cmip6_10yr_no_evspsblveg_hurs_netrad.RData')
 load('RData/total_land_area.RData')
 # # from /testdir
 # load('testdir/202106_cmip6_no_evspsblveg_hurs.RData')
-# load('testdir/202112_dcorr_cmip6_10yr_no_evspsblveg_hurs.RData')
+# load('testdir/202112_dcorr_cmip6_10yr_no_evspsblveg_hurs_netrad.RData')
 # load('testdir/total_land_area.RData')
-
-dcorr.list <- list(dcorr.list[[1]], dcorr.list[[2]], dcorr.list[[3]], dcorr.list[[4]],
-                   dcorr.list[[5]], dcorr.list[[6]], dcorr.list[[7]], dcorr.list[[9]],
-                   dcorr.list[[10]], dcorr.list[[11]], dcorr.list[[12]])
-av_tas.list <- list(av_tas.list[[1]], av_tas.list[[2]], av_tas.list[[3]], av_tas.list[[4]],
-                    av_tas.list[[5]], av_tas.list[[6]], av_tas.list[[7]], av_tas.list[[9]],
-                    av_tas.list[[10]], av_tas.list[[11]], av_tas.list[[12]])
-av_mrso.list <- list(av_mrso.list[[1]], av_mrso.list[[2]], av_mrso.list[[3]], av_mrso.list[[4]],
-                     av_mrso.list[[5]], av_mrso.list[[6]], av_mrso.list[[7]], av_mrso.list[[9]],
-                     av_mrso.list[[10]], av_mrso.list[[11]], av_mrso.list[[12]])
-av_hfls.list <- list(av_hfls.list[[1]], av_hfls.list[[2]], av_hfls.list[[3]], av_hfls.list[[4]],
-                     av_hfls.list[[5]], av_hfls.list[[6]], av_hfls.list[[7]], av_hfls.list[[9]],
-                     av_hfls.list[[10]], av_hfls.list[[11]], av_hfls.list[[12]])
-av_lai.list <- list(av_lai.list[[1]], av_lai.list[[2]], av_lai.list[[3]], av_lai.list[[4]],
-                    av_lai.list[[5]], av_lai.list[[6]], av_lai.list[[7]], av_lai.list[[9]],
-                    av_lai.list[[10]], av_lai.list[[11]], av_lai.list[[12]])
-av_rsds.list <- list(av_rsds.list[[1]], av_rsds.list[[2]], av_rsds.list[[3]], av_rsds.list[[4]],
-                     av_rsds.list[[5]], av_rsds.list[[6]], av_rsds.list[[7]], av_rsds.list[[9]],
-                     av_rsds.list[[10]], av_rsds.list[[11]], av_rsds.list[[12]])
-av_rsus.list <- list(av_rsus.list[[1]], av_rsus.list[[2]], av_rsus.list[[3]], av_rsus.list[[4]],
-                     av_rsus.list[[5]], av_rsus.list[[6]], av_rsus.list[[7]], av_rsus.list[[9]],
-                     av_rsus.list[[10]], av_rsus.list[[11]], av_rsus.list[[12]])
-av_rlds.list <- list(av_rlds.list[[1]], av_rlds.list[[2]], av_rlds.list[[3]], av_rlds.list[[4]],
-                     av_rlds.list[[5]], av_rlds.list[[6]], av_rlds.list[[7]], av_rlds.list[[9]],
-                     av_rlds.list[[10]], av_rlds.list[[11]], av_rlds.list[[12]])
-av_rlus.list <- list(av_rlus.list[[1]], av_rlus.list[[2]], av_rlus.list[[3]], av_rlus.list[[4]],
-                     av_rlus.list[[5]], av_rlus.list[[6]], av_rlus.list[[7]], av_rlus.list[[9]],
-                     av_rlus.list[[10]], av_rlus.list[[11]], av_rlus.list[[12]])
-av_pr.list <- list(av_pr.list[[1]], av_pr.list[[2]], av_pr.list[[3]], av_pr.list[[4]],
-                   av_pr.list[[5]], av_pr.list[[6]], av_pr.list[[7]], av_pr.list[[9]],
-                   av_pr.list[[10]], av_pr.list[[11]], av_pr.list[[12]])
 
 lon <- seq(-179,179,2)
 lat <- seq(-89,89,2)
@@ -75,7 +44,7 @@ source('Scripts/functions/plot_discrete_cbar.R')
 
 
 # select the right models and put in array
-dcorr_all.array <- av_tas.array <-
+dcorr_netrad_all.array <- av_tas.array <-
   av_mrso.array <- av_hfls.array <-
   av_rlds.array <- av_rlus.array <-
   av_rsds.array <- av_rsus.array <-
@@ -83,7 +52,7 @@ dcorr_all.array <- av_tas.array <-
   array(NaN,c(180,90,11*12)) # 14 different source_id and 14*10 years (total: 154)
 count_all <- 1
 for(i in 1:11){
-  dcorr_all.array[,,count_all:(count_all+11)] <- dcorr.list[[i]]
+  dcorr_netrad_all.array[,,count_all:(count_all+11)] <- dcorr_netrad.list[[i]]
   av_tas.array[,,count_all:(count_all+11)] <- av_tas.list[[i]]
   av_mrso.array[,,count_all:(count_all+11)] <- av_mrso.list[[i]]
   av_lai.array[,,count_all:(count_all+11)] <- av_lai.list[[i]]
@@ -97,7 +66,7 @@ for(i in 1:11){
   print(paste(i, " is done...",sep=''))
 }
 # Rearrange the grid cells, because they are shifted 180 degrees in longitude
-test <- array(NaN,c(180,90,11*12)); test[1:90,,] <- dcorr_all.array[91:180,,]; test[91:180,,] <- dcorr_all.array[1:90,,]; dcorr_all.array <- test; dcorr_all.array <- -1*dcorr_all.array
+test <- array(NaN,c(180,90,11*12)); test[1:90,,] <- dcorr_netrad_all.array[91:180,,]; test[91:180,,] <- dcorr_netrad_all.array[1:90,,]; dcorr_netrad_all.array <- test; dcorr_netrad_all.array <- -1*dcorr_netrad_all.array
 test <- array(NaN,c(180,90,11*12)); test[1:90,,] <- av_tas.array[91:180,,]; test[91:180,,] <- av_tas.array[1:90,,]; av_tas.array <- test
 test <- array(NaN,c(180,90,11*12)); test[1:90,,] <- av_mrso.array[91:180,,]; test[91:180,,] <- av_mrso.array[1:90,,]; av_mrso.array <- test
 test <- array(NaN,c(180,90,11*12)); test[1:90,,] <- av_lai.array[91:180,,]; test[91:180,,] <- av_lai.array[1:90,,]; av_lai.array <- test
@@ -115,7 +84,6 @@ av_rnet.array <- ((av_rlds.array - av_rlus.array) + (av_rsds.array - av_rsus.arr
 # conversion factor 1mm = 28.35648 Wm-2
 av_ar.array <- av_rnet.array/(av_pr.array*24*60*60)
 
-# dredge with crop/treeFrac as explanatory variables
 # maybe now per surface area instead of % of grid cells?
 r <- raster()  # by default 1 by 1 degree
 res(r) <- 2 # so change the resolution
@@ -130,29 +98,13 @@ for(x in 1:180){
 mask_obs <- array(NaN,c(180,90))
 for(x in 1:180){
   for(y in 1:90){
-    if(sum(!is.na(dcorr_all.array[x,y,])) == 11*12){ # check if all the models have a value there
+    if(sum(!is.na(dcorr_netrad_all.array[x,y,])) == 11*12){ # check if all the models have a value there
       mask_obs[x,y] <- 1
     }
   }
 }
 
-mmmean_av_tas <- mmmean_av_ar <-
-  mmmean_av_lai <-
-  array(NaN,c(180,90))
-for(x in 1:180){
-  for(y in 1:90){
-    if(!is.na(models_with_full_timeseries[x,y])){
-      if(models_with_full_timeseries[x,y] > 4){
-        mmmean_av_tas[x,y] <- mean(av_tas.array[x,y,], na.rm = T)
-        mmmean_av_ar[x,y] <- mean(av_ar.array[x,y,], na.rm = T)
-        mmmean_av_lai[x,y] <- mean(av_lai.array[x,y,], na.rm = T)
-      }
-    }
-  }
-}
-
-
-mmmean_dcorr_per_10yr <- mmmean_tas_per_10yr <-
+mmmean_dcorr_netrad_per_10yr <- mmmean_tas_per_10yr <- mmmean_netrad_per_10yr <-
   mmmean_mrso_per_10yr <- mmmean_hfls_per_10yr <-
   mmmean_lai_per_10yr <- mmmean_ar_per_10yr <-
   array(NaN,c(180,90,12))
@@ -162,8 +114,9 @@ for(i in 1:12){
     for(y in 1:90){
       if(!is.na(models_with_full_timeseries[x,y])){
         if(models_with_full_timeseries[x,y] > 4){
-          mmmean_dcorr_per_10yr[x,y,i] <- mean(dcorr_all.array[x,y,(index_per_10yr+i)],na.rm=T)
+          mmmean_dcorr_netrad_per_10yr[x,y,i] <- mean(dcorr_netrad_all.array[x,y,(index_per_10yr+i)],na.rm=T)
           mmmean_tas_per_10yr[x,y,i] <- mean(av_tas.array[x,y,(index_per_10yr+i)],na.rm=T)
+          mmmean_netrad_per_10yr[x,y,i] <- mean(av_rnet.array[x,y,(index_per_10yr+i)],na.rm=T)
           mmmean_mrso_per_10yr[x,y,i] <- mean(av_mrso.array[x,y,(index_per_10yr+i)],na.rm=T)
           mmmean_hfls_per_10yr[x,y,i] <- mean(av_hfls.array[x,y,(index_per_10yr+i)],na.rm=T)
           mmmean_lai_per_10yr[x,y,i] <- mean(av_lai.array[x,y,(index_per_10yr+i)],na.rm=T)
@@ -174,15 +127,16 @@ for(i in 1:12){
   }
 }
 
-mmmean_kendall_dcorr <- mmmean_kendall_tas <- mmmean_kendall_hfls <-
+mmmean_kendall_dcorr_netrad <- mmmean_kendall_tas <- mmmean_kendall_netrad <- mmmean_kendall_hfls <-
   mmmean_kendall_mrso <- mmmean_kendall_lai <- mmmean_kendall_ar <- array(NaN,c(180,90,2)) # 2: slope (all) & p.value (all)
 sum_blocks <- array(NaN,c(180,90))
 for(x in 1:180){
   for(y in 1:90){
-    if(sum(!is.na(mmmean_dcorr_per_10yr[x,y,])) == 12){
-      sum_blocks[x,y] <- sum(!is.na(mmmean_dcorr_per_10yr[x,y,]))
-      mmmean_kendall_dcorr[x,y,] <- c(unname(kendallTrendTest(mmmean_dcorr_per_10yr[x,y,])$estimate[2]), unname(kendallTrendTest(mmmean_dcorr_per_10yr[x,y,])$p.value))
+    if(sum(!is.na(mmmean_dcorr_netrad_per_10yr[x,y,])) == 12){
+      sum_blocks[x,y] <- sum(!is.na(mmmean_dcorr_netrad_per_10yr[x,y,]))
+      mmmean_kendall_dcorr_netrad[x,y,] <- c(unname(kendallTrendTest(mmmean_dcorr_netrad_per_10yr[x,y,])$estimate[2]), unname(kendallTrendTest(mmmean_dcorr_netrad_per_10yr[x,y,])$p.value))
       mmmean_kendall_tas[x,y,] <- c(unname(kendallTrendTest(mmmean_tas_per_10yr[x,y,])$estimate[2]), unname(kendallTrendTest(mmmean_tas_per_10yr[x,y,])$p.value))
+      mmmean_kendall_netrad[x,y,] <- c(unname(kendallTrendTest(mmmean_netrad_per_10yr[x,y,])$estimate[2]), unname(kendallTrendTest(mmmean_netrad_per_10yr[x,y,])$p.value))
       mmmean_kendall_mrso[x,y,] <- c(unname(kendallTrendTest(mmmean_mrso_per_10yr[x,y,])$estimate[2]), unname(kendallTrendTest(mmmean_mrso_per_10yr[x,y,])$p.value))
       mmmean_kendall_hfls[x,y,] <- c(unname(kendallTrendTest(mmmean_hfls_per_10yr[x,y,])$estimate[2]), unname(kendallTrendTest(mmmean_hfls_per_10yr[x,y,])$p.value))
       mmmean_kendall_lai[x,y,] <- c(unname(kendallTrendTest(mmmean_lai_per_10yr[x,y,])$estimate[2]), unname(kendallTrendTest(mmmean_lai_per_10yr[x,y,])$p.value))
@@ -194,21 +148,21 @@ for(x in 1:180){
 # dredge + calc.relimp()
 # https://onlinelibrary.wiley.com/doi/full/10.1111/gcb.15385
 options(na.action = "na.fail")
-vars <- c("tas","mrso","hfls","lai","ar","adj. R2 < 0.5")
+vars <- c("netrad","mrso","hfls","lai","ar","adj. R2 < 0.5")
 dom_var_dredge_relimp <- array(NaN,c(180,90,2))
 dom_var_dredge_relimp_all <- array(0,c(180,90,5))
 adj_R2_dredge_relimp <- array(NaN,c(180,90))
 lin_mod.array <- array(NaN,c(180,90))
 for(x in 1:180){
   for(y in 1:90){
-    if(sum(!is.na(mmmean_dcorr_per_10yr[x,y,])) == 12 & sum(!is.na(mmmean_lai_per_10yr[x,y,])) == 12 & round(sd(mmmean_lai_per_10yr[x,y,]),4) != 0 & round(sd(mmmean_mrso_per_10yr[x,y,]),4) != 0){ # there should be variability in mrso and lai, otherwise there is no explanatory power in their respective time series
+    if(sum(!is.na(mmmean_dcorr_netrad_per_10yr[x,y,])) == 12 & sum(!is.na(mmmean_lai_per_10yr[x,y,])) == 12 & round(sd(mmmean_lai_per_10yr[x,y,]),4) != 0 & round(sd(mmmean_mrso_per_10yr[x,y,]),4) != 0){ # there should be variability in mrso and lai, otherwise there is no explanatory power in their respective time series
       relimp_variables.list <- list()
       rsq.vec <- c()
       # dredge: automated model selection
-      lm_dcorr.df <- lm(mmmean_dcorr_per_10yr[x,y,] ~
-                          mmmean_tas_per_10yr[x,y,] + mmmean_mrso_per_10yr[x,y,] + mmmean_hfls_per_10yr[x,y,] +
+      lm_dcorr_netrad.df <- lm(mmmean_dcorr_netrad_per_10yr[x,y,] ~
+                          mmmean_netrad_per_10yr[x,y,] + mmmean_mrso_per_10yr[x,y,] + mmmean_hfls_per_10yr[x,y,] +
                           mmmean_lai_per_10yr[x,y,] + mmmean_ar_per_10yr[x,y,])
-      dd <- dredge(lm_dcorr.df, extra = list(AIC))
+      dd <- dredge(lm_dcorr_netrad.df, extra = list(AIC))
 
       # IMPORTANCE: pick a subset of best models (all have same performance/complexity in terms of AIC)
       dd_subset <- subset(dd, delta < 4)
@@ -232,12 +186,12 @@ for(x in 1:180){
               }
             }
           }else{ # if the model has only one variable
-            expl_dcorr_dredge.df <- summary(get.models(dd_subset, lin_mod)[[1]])
+            expl_dcorr_netrad_dredge.df <- summary(get.models(dd_subset, lin_mod)[[1]])
             for(i in 1:5){
-              if(grepl(vars[i],names(expl_dcorr_dredge.df$aliased)[2])){ # if there are only two explanatory variables left in the model, the first one is the intercept and the second one is the variable
+              if(grepl(vars[i],names(expl_dcorr_netrad_dredge.df$aliased)[2])){ # if there are only two explanatory variables left in the model, the first one is the intercept and the second one is the variable
                 relimp_var_lmg.df <- rbind(relimp_var_lmg.df,
                                            data.frame("var" = i, # which variable
-                                                      "lmg" = expl_dcorr_dredge.df$r.squared, # explained variance for dominant variable
+                                                      "lmg" = expl_dcorr_netrad_dredge.df$r.squared, # explained variance for dominant variable
                                                       "weight" = dd_subset$weight[lin_mod])) # Akaike weight per model
                 dom_var_dredge_relimp_all[x,y,i] <- dom_var_dredge_relimp_all[x,y,i] + 1
                 next
@@ -305,7 +259,7 @@ myvalues_dom_var <- seq(0.5,6.5,1)
 
 dom_var_ts.df$cuts_dom_var_dredge_relimp <- cut(dom_var_ts.df$dom_var_dredge_relimp, myvalues_dom_var, include.lowest = T)
 
-# the mean dcorr hist plot
+# the mean dcorr_netrad hist plot
 count_dom_var_dredge_relimp.df <- setNames(data.frame(matrix(ncol = 3, nrow = 0)),
                                            c("count","area","var"))
 for(i in 1:5){
@@ -388,8 +342,8 @@ bar_dom_var_dredge_relimp <- ggplot(count_dom_var_dredge_relimp_reg.df, aes(x = 
   geom_bar(stat='identity', position = position_dodge(width = NULL), col = 'black', width = .8) +
   geom_text(size = 2.5, position = position_dodge(width=.8), vjust = +1) +
   scale_x_discrete("") +
-  scale_y_continuous(expression(paste("land area-% per region")), expand = c(0,0),limits=c(0,50)) +
-  scale_fill_manual("",labels = c("Temperature","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index"),
+  scale_y_continuous(expression(paste("land area-% per region")), expand = c(0,0)) +
+  scale_fill_manual("",labels = c("Surface net radiation","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index"),
                     values = cols_dom_var[1:5],
                     drop = F) +
   theme(legend.position = c(.45,.85),
@@ -410,14 +364,14 @@ bar_dom_var_dredge_relimp <- ggplot(count_dom_var_dredge_relimp_reg.df, aes(x = 
   )
 bar_dom_var_dredge_relimp
 
-ggsave("testdir/SFig16.png", plot = bar_dom_var_dredge_relimp, width = 9, height = 7, units = "in")
+ggsave("testdir/SFig17.png", plot = bar_dom_var_dredge_relimp, width = 9, height = 7, units = "in")
 
-bar_dom_var_dredge_relimp_tas_per_reg <- ggplot(count_dom_var_dredge_relimp_reg.df[which(count_dom_var_dredge_relimp_reg.df$var == 'tas'),], aes(x = reg_factor, y = sign_area, fill = var_factor, label=round(sign_area,0))) +
+bar_dom_var_dredge_relimp_netrad_per_reg <- ggplot(count_dom_var_dredge_relimp_reg.df[which(count_dom_var_dredge_relimp_reg.df$var == 'netrad'),], aes(x = reg_factor, y = sign_area, fill = var_factor, label=round(sign_area,0))) +
   geom_bar(stat='identity', position = position_dodge(width = NULL), col = 'black', width = .5) +
   geom_text(size = 2.5, position = position_dodge(width=.8), vjust = +1) +
   scale_x_discrete("") +
   scale_y_continuous(expression(paste("land area-% per region")), expand = c(0,0)) +
-  scale_fill_manual("",labels = c("Temperature","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index"),
+  scale_fill_manual("",labels = c("Surface net radiation","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index"),
                     values = cols_dom_var,
                     drop = F) +
   theme(legend.position = "none",
@@ -437,9 +391,9 @@ bar_dom_var_dredge_relimp_tas_per_reg <- ggplot(count_dom_var_dredge_relimp_reg.
         axis.title = element_text(size=9),
         plot.title = element_text(size=10)
   )
-bar_dom_var_dredge_relimp_tas_per_reg
-bar_dom_var_dredge_relimp_tas_per_reg <- ggplotGrob(bar_dom_var_dredge_relimp_tas_per_reg)
-plot_bar_dom_var_dredge_relimp_tas_per_reg <- bar_dom_var_dredge_relimp_tas_per_reg
+bar_dom_var_dredge_relimp_netrad_per_reg
+bar_dom_var_dredge_relimp_netrad_per_reg <- ggplotGrob(bar_dom_var_dredge_relimp_netrad_per_reg)
+plot_bar_dom_var_dredge_relimp_netrad_per_reg <- bar_dom_var_dredge_relimp_netrad_per_reg
 
 single_var.df <- dom_var_ts.df[which(dom_var_ts.df$number_of_expl_var == 1),]
 
@@ -457,7 +411,7 @@ a <- ggplot(dom_var_ts.df, aes(x=lon,y=lat,fill=cuts_dom_var_dredge_relimp)) +
   geom_segment(data = hotspot_regs.df, inherit.aes = F, aes(x = x, y = y, xend = xend, yend = yend), lty = 'dashed') +
   scale_fill_manual("Dominant variable",
                     values = cols_dom_var,
-                    labels = c("Temperature","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index",expression("adjusted R"^2*" < 0.5")),
+                    labels = c("Surface net radiation","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index",expression("adjusted R"^2*" < 0.5")),
                     drop = F) +
   scale_x_continuous("longitude",
                      limits=c(-180,180),
@@ -487,24 +441,20 @@ a <- ggplotGrob(a)
 
 gt1 <- gtable(widths = unit(rep(2,32), c("null")), heights = unit(rep(2,32), "null"))
 gt1 <- gtable_add_grob(gt1, a, t=1, b=32, l=1, r=32)
-gt1 <- gtable_add_grob(gt1, plot_bar_dom_var_dredge_relimp_tas_per_reg, t = 26, l = 3, b = 18, r = 8)
+gt1 <- gtable_add_grob(gt1, plot_bar_dom_var_dredge_relimp_netrad_per_reg, t = 26, l = 3, b = 18, r = 8)
 gt1 <- gtable_add_grob(gt1, plot_bar_dom_var_dredge_relimp, t = 16, l = 3, b = 10, r = 8)
 grid.draw(gt1)
 
 # how much % actually has a good prediction?
 sum(area.array[which(!is.na(dom_var_dredge_relimp[,,1]) & dom_var_dredge_relimp[,,1] != 6)], na.rm = T) / total_land_area
 
-ggsave("testdir/Fig4.png", plot = gt1, width = 9, height = 7, units = "in")
-
-# from /RData
-load("RData/202106_cmip6_croptreeFrac_plot.RData")
-# # from /testdir
-# load("testdir/202106_cmip6_croptreeFrac_plot.RData")
+# ggsave("testdir/Fig4.png", plot = gt1, width = 9, height = 7, units = "in") 
+ggsave("testdir/Fig4.eps", plot = gt1, width = 9, height = 7, units = "in", device = cairo_ps) 
 
 # adjusted R2 > 0.7
 
 options(na.action = "na.fail")
-vars <- c("tas","mrso","hfls","lai","ar","adj. R2 < 0.7")
+vars <- c("netrad","mrso","hfls","lai","ar","adj. R2 < 0.7")
 # dredge + calc.relimp()
 # https://onlinelibrary.wiley.com/doi/full/10.1111/gcb.15385
 dom_var_dredge_relimp <- array(NaN,c(180,90,2))
@@ -513,14 +463,14 @@ adj_R2_dredge_relimp <- array(NaN,c(180,90))
 lin_mod.array <- array(NaN,c(180,90))
 for(x in 1:180){
   for(y in 1:90){
-    if(sum(!is.na(mmmean_dcorr_per_10yr[x,y,])) == 12 & sum(!is.na(mmmean_lai_per_10yr[x,y,])) == 12 & round(sd(mmmean_lai_per_10yr[x,y,]),4) != 0 & round(sd(mmmean_mrso_per_10yr[x,y,]),4) != 0){ # there should be variability in mrso and lai, otherwise there is no explanatory power in their respective time series
+    if(sum(!is.na(mmmean_dcorr_netrad_per_10yr[x,y,])) == 12 & sum(!is.na(mmmean_lai_per_10yr[x,y,])) == 12 & round(sd(mmmean_lai_per_10yr[x,y,]),4) != 0 & round(sd(mmmean_mrso_per_10yr[x,y,]),4) != 0){ # there should be variability in mrso and lai, otherwise there is no explanatory power in their respective time series
       relimp_variables.list <- list()
       rsq.vec <- c()
       # dredge: automated model selection
-      lm_dcorr.df <- lm(mmmean_dcorr_per_10yr[x,y,] ~
-                          mmmean_tas_per_10yr[x,y,] + mmmean_mrso_per_10yr[x,y,] + mmmean_hfls_per_10yr[x,y,] +
+      lm_dcorr_netrad.df <- lm(mmmean_dcorr_netrad_per_10yr[x,y,] ~
+                          mmmean_netrad_per_10yr[x,y,] + mmmean_mrso_per_10yr[x,y,] + mmmean_hfls_per_10yr[x,y,] +
                           mmmean_lai_per_10yr[x,y,] + mmmean_ar_per_10yr[x,y,])
-      dd <- dredge(lm_dcorr.df, extra = list(AIC))
+      dd <- dredge(lm_dcorr_netrad.df, extra = list(AIC))
       
       # IMPORTANCE: pick a subset of best models (all have same performance/complexity in terms of AIC)
       dd_subset <- subset(dd, delta < 4)
@@ -543,12 +493,12 @@ for(x in 1:180){
               }
             }
           }else{ # if the model has only one variable
-            expl_dcorr_dredge.df <- summary(get.models(dd_subset, lin_mod)[[1]])
+            expl_dcorr_netrad_dredge.df <- summary(get.models(dd_subset, lin_mod)[[1]])
             for(i in 1:5){
-              if(grepl(vars[i],names(expl_dcorr_dredge.df$aliased)[2])){ # if there are only two explanatory variables left in the model, the first one is the intercept and the second one is the variable
+              if(grepl(vars[i],names(expl_dcorr_netrad_dredge.df$aliased)[2])){ # if there are only two explanatory variables left in the model, the first one is the intercept and the second one is the variable
                 relimp_var_lmg.df <- rbind(relimp_var_lmg.df,
                                            data.frame("var" = i, # which variable
-                                                      "lmg" = expl_dcorr_dredge.df$r.squared, # explained variance for dominant variable
+                                                      "lmg" = expl_dcorr_netrad_dredge.df$r.squared, # explained variance for dominant variable
                                                       "weight" = dd_subset$weight[lin_mod])) # Akaike weight per model
                 dom_var_dredge_relimp_all[x,y,i] <- dom_var_dredge_relimp_all[x,y,i] + 1
                 next
@@ -616,7 +566,7 @@ myvalues_dom_var <- seq(0.5,6.5,1)
 
 dom_var_ts.df$cuts_dom_var_dredge_relimp <- cut(dom_var_ts.df$dom_var_dredge_relimp, myvalues_dom_var, include.lowest = T)
 
-# the mean dcorr hist plot
+# the mean dcorr_netrad hist plot
 count_dom_var_dredge_relimp.df <- setNames(data.frame(matrix(ncol = 3, nrow = 0)),
                                            c("count","area","var"))
 for(i in 1:5){
@@ -694,12 +644,12 @@ for(j in seq(1,20,4)){
 count_dom_var_dredge_relimp_reg.df$var_factor <- factor(count_dom_var_dredge_relimp_reg.df$var, levels = vars[1:5])
 count_dom_var_dredge_relimp_reg.df$reg_factor <- factor(count_dom_var_dredge_relimp_reg.df$reg, levels = reg)
 
-bar_dom_var_dredge_relimp_tas_per_reg <- ggplot(count_dom_var_dredge_relimp_reg.df[which(count_dom_var_dredge_relimp_reg.df$var == 'tas'),], aes(x = reg_factor, y = sign_area, fill = var_factor, label=round(sign_area,0))) +
+bar_dom_var_dredge_relimp_netrad_per_reg <- ggplot(count_dom_var_dredge_relimp_reg.df[which(count_dom_var_dredge_relimp_reg.df$var == 'netrad'),], aes(x = reg_factor, y = sign_area, fill = var_factor, label=round(sign_area,0))) +
   geom_bar(stat='identity', position = position_dodge(width = NULL), col = 'black', width = .5) +
   geom_text(size = 2.5, position = position_dodge(width=.8), vjust = +1) +
   scale_x_discrete("") +
   scale_y_continuous(expression(paste("land area-% per region")), expand = c(0,0)) +
-  scale_fill_manual("",labels = c("Temperature","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index"),
+  scale_fill_manual("",labels = c("Surface net radiation","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index"),
                     values = cols_dom_var,
                     drop = F) +
   theme(legend.position = "none",
@@ -719,9 +669,9 @@ bar_dom_var_dredge_relimp_tas_per_reg <- ggplot(count_dom_var_dredge_relimp_reg.
         axis.title = element_text(size=9),
         plot.title = element_text(size=10)
   )
-bar_dom_var_dredge_relimp_tas_per_reg
-bar_dom_var_dredge_relimp_tas_per_reg <- ggplotGrob(bar_dom_var_dredge_relimp_tas_per_reg)
-plot_bar_dom_var_dredge_relimp_tas_per_reg <- bar_dom_var_dredge_relimp_tas_per_reg
+bar_dom_var_dredge_relimp_netrad_per_reg
+bar_dom_var_dredge_relimp_netrad_per_reg <- ggplotGrob(bar_dom_var_dredge_relimp_netrad_per_reg)
+plot_bar_dom_var_dredge_relimp_netrad_per_reg <- bar_dom_var_dredge_relimp_netrad_per_reg
 
 single_var.df <- dom_var_ts.df[which(dom_var_ts.df$number_of_expl_var == 1),]
 
@@ -733,7 +683,7 @@ a <- ggplot(dom_var_ts.df, aes(x=lon,y=lat,fill=cuts_dom_var_dredge_relimp)) +
   geom_segment(data = hotspot_regs.df, inherit.aes = F, aes(x = x, y = y, xend = xend, yend = yend), lty = 'dashed') +
   scale_fill_manual("Dominant variable",
                     values = cols_dom_var, 
-                    labels = c("Temperature","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index",expression("adjusted R"^2*" < 0.7")),
+                    labels = c("Surface net radiation","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index",expression("adjusted R"^2*" < 0.7")),
                     drop = F) +
   scale_x_continuous("longitude",
                      limits=c(-180,180),
@@ -763,7 +713,7 @@ a <- ggplotGrob(a)
 
 gt1 <- gtable(widths = unit(rep(2,32), c("null")), heights = unit(rep(2,32), "null"))
 gt1 <- gtable_add_grob(gt1, a, t=1, b=32, l=1, r=32)
-gt1 <- gtable_add_grob(gt1, plot_bar_dom_var_dredge_relimp_tas_per_reg, t = 26, l = 3, b = 18, r = 8)
+gt1 <- gtable_add_grob(gt1, plot_bar_dom_var_dredge_relimp_netrad_per_reg, t = 26, l = 3, b = 18, r = 8)
 gt1 <- gtable_add_grob(gt1, plot_bar_dom_var_dredge_relimp, t = 16, l = 3, b = 10, r = 8)
 grid.draw(gt1)
 
@@ -772,7 +722,7 @@ gt_relimp0.7 <- gt1
 # adjusted R2 > 0.3
 
 options(na.action = "na.fail")
-vars <- c("tas","mrso","hfls","lai","ar","adj. R2 < 0.3")
+vars <- c("netrad","mrso","hfls","lai","ar","adj. R2 < 0.3")
 # dredge + calc.relimp()
 # https://onlinelibrary.wiley.com/doi/full/10.1111/gcb.15385
 dom_var_dredge_relimp <- array(NaN,c(180,90,2))
@@ -781,14 +731,14 @@ adj_R2_dredge_relimp <- array(NaN,c(180,90))
 lin_mod.array <- array(NaN,c(180,90))
 for(x in 1:180){
   for(y in 1:90){
-    if(sum(!is.na(mmmean_dcorr_per_10yr[x,y,])) == 12 & sum(!is.na(mmmean_lai_per_10yr[x,y,])) == 12 & round(sd(mmmean_lai_per_10yr[x,y,]),4) != 0 & round(sd(mmmean_mrso_per_10yr[x,y,]),4) != 0){ # there should be variability in mrso and lai, otherwise there is no explanatory power in their respective time series
+    if(sum(!is.na(mmmean_dcorr_netrad_per_10yr[x,y,])) == 12 & sum(!is.na(mmmean_lai_per_10yr[x,y,])) == 12 & round(sd(mmmean_lai_per_10yr[x,y,]),4) != 0 & round(sd(mmmean_mrso_per_10yr[x,y,]),4) != 0){ # there should be variability in mrso and lai, otherwise there is no explanatory power in their respective time series
       relimp_variables.list <- list()
       rsq.vec <- c()
       # dredge: automated model selection
-      lm_dcorr.df <- lm(mmmean_dcorr_per_10yr[x,y,] ~
-                          mmmean_tas_per_10yr[x,y,] + mmmean_mrso_per_10yr[x,y,] + mmmean_hfls_per_10yr[x,y,] +
+      lm_dcorr_netrad.df <- lm(mmmean_dcorr_netrad_per_10yr[x,y,] ~
+                          mmmean_netrad_per_10yr[x,y,] + mmmean_mrso_per_10yr[x,y,] + mmmean_hfls_per_10yr[x,y,] +
                           mmmean_lai_per_10yr[x,y,] + mmmean_ar_per_10yr[x,y,])
-      dd <- dredge(lm_dcorr.df, extra = list(AIC))
+      dd <- dredge(lm_dcorr_netrad.df, extra = list(AIC))
       
       # IMPORTANCE: pick a subset of best models (all have same performance/complexity in terms of AIC)
       dd_subset <- subset(dd, delta < 4)
@@ -811,12 +761,12 @@ for(x in 1:180){
               }
             }
           }else{ # if the model has only one variable
-            expl_dcorr_dredge.df <- summary(get.models(dd_subset, lin_mod)[[1]])
+            expl_dcorr_netrad_dredge.df <- summary(get.models(dd_subset, lin_mod)[[1]])
             for(i in 1:5){
-              if(grepl(vars[i],names(expl_dcorr_dredge.df$aliased)[2])){ # if there are only two explanatory variables left in the model, the first one is the intercept and the second one is the variable
+              if(grepl(vars[i],names(expl_dcorr_netrad_dredge.df$aliased)[2])){ # if there are only two explanatory variables left in the model, the first one is the intercept and the second one is the variable
                 relimp_var_lmg.df <- rbind(relimp_var_lmg.df,
                                            data.frame("var" = i, # which variable
-                                                      "lmg" = expl_dcorr_dredge.df$r.squared, # explained variance for dominant variable
+                                                      "lmg" = expl_dcorr_netrad_dredge.df$r.squared, # explained variance for dominant variable
                                                       "weight" = dd_subset$weight[lin_mod])) # Akaike weight per model
                 dom_var_dredge_relimp_all[x,y,i] <- dom_var_dredge_relimp_all[x,y,i] + 1
                 next
@@ -884,7 +834,7 @@ myvalues_dom_var <- seq(0.5,6.5,1)
 
 dom_var_ts.df$cuts_dom_var_dredge_relimp <- cut(dom_var_ts.df$dom_var_dredge_relimp, myvalues_dom_var, include.lowest = T)
 
-# the mean dcorr hist plot
+# the mean dcorr_netrad hist plot
 count_dom_var_dredge_relimp.df <- setNames(data.frame(matrix(ncol = 3, nrow = 0)),
                                            c("count","area","var"))
 for(i in 1:5){
@@ -964,12 +914,12 @@ count_dom_var_dredge_relimp_reg.df$reg_factor <- factor(count_dom_var_dredge_rel
 
 
 
-bar_dom_var_dredge_relimp_tas_per_reg <- ggplot(count_dom_var_dredge_relimp_reg.df[which(count_dom_var_dredge_relimp_reg.df$var == 'tas'),], aes(x = reg_factor, y = sign_area, fill = var_factor, label=round(sign_area,0))) +
+bar_dom_var_dredge_relimp_netrad_per_reg <- ggplot(count_dom_var_dredge_relimp_reg.df[which(count_dom_var_dredge_relimp_reg.df$var == 'netrad'),], aes(x = reg_factor, y = sign_area, fill = var_factor, label=round(sign_area,0))) +
   geom_bar(stat='identity', position = position_dodge(width = NULL), col = 'black', width = .5) +
   geom_text(size = 2.5, position = position_dodge(width=.8), vjust = +1) +
   scale_x_discrete("") +
   scale_y_continuous(expression(paste("land area-% per region")), expand = c(0,0)) +
-  scale_fill_manual("",labels = c("Temperature","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index"),
+  scale_fill_manual("",labels = c("Surface net radiation","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index"),
                     values = cols_dom_var,
                     drop = F) +
   theme(legend.position = "none",
@@ -989,9 +939,9 @@ bar_dom_var_dredge_relimp_tas_per_reg <- ggplot(count_dom_var_dredge_relimp_reg.
         axis.title = element_text(size=9),
         plot.title = element_text(size=10)
   )
-bar_dom_var_dredge_relimp_tas_per_reg
-bar_dom_var_dredge_relimp_tas_per_reg <- ggplotGrob(bar_dom_var_dredge_relimp_tas_per_reg)
-plot_bar_dom_var_dredge_relimp_tas_per_reg <- bar_dom_var_dredge_relimp_tas_per_reg
+bar_dom_var_dredge_relimp_netrad_per_reg
+bar_dom_var_dredge_relimp_netrad_per_reg <- ggplotGrob(bar_dom_var_dredge_relimp_netrad_per_reg)
+plot_bar_dom_var_dredge_relimp_netrad_per_reg <- bar_dom_var_dredge_relimp_netrad_per_reg
 
 single_var.df <- dom_var_ts.df[which(dom_var_ts.df$number_of_expl_var == 1),]
 
@@ -1003,7 +953,7 @@ a <- ggplot(dom_var_ts.df, aes(x=lon,y=lat,fill=cuts_dom_var_dredge_relimp)) +
   geom_segment(data = hotspot_regs.df, inherit.aes = F, aes(x = x, y = y, xend = xend, yend = yend), lty = 'dashed') +
   scale_fill_manual("Dominant variable",
                     values = cols_dom_var, 
-                    labels = c("Temperature","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index",expression("adjusted R"^2*" < 0.3")),
+                    labels = c("Surface net radiation","Soil moisture","Terrestrial evaporation","Leaf Area Index","Aridity Index",expression("adjusted R"^2*" < 0.3")),
                     drop = F) +
   scale_x_continuous("longitude",
                      limits=c(-180,180),
@@ -1033,7 +983,7 @@ a <- ggplotGrob(a)
 
 gt1 <- gtable(widths = unit(rep(2,32), c("null")), heights = unit(rep(2,32), "null"))
 gt1 <- gtable_add_grob(gt1, a, t=1, b=32, l=1, r=32)
-gt1 <- gtable_add_grob(gt1, plot_bar_dom_var_dredge_relimp_tas_per_reg, t = 26, l = 3, b = 18, r = 8)
+gt1 <- gtable_add_grob(gt1, plot_bar_dom_var_dredge_relimp_netrad_per_reg, t = 26, l = 3, b = 18, r = 8)
 gt1 <- gtable_add_grob(gt1, plot_bar_dom_var_dredge_relimp, t = 16, l = 3, b = 10, r = 8)
 grid.draw(gt1)
 
@@ -1044,4 +994,4 @@ sum(area.array[which(!is.na(dom_var_dredge_relimp[,,1]) & dom_var_dredge_relimp[
 
 plots <- plot_grid(gt_relimp0.7, gt_relimp0.3, nrow = 2, align = 'hv')
 
-ggsave("testdir/SFig13.png", plot = plots, width = 9, height = 14, units = "in")
+ggsave("testdir/SFig14.png", plot = plots, width = 9, height = 14, units = "in")
