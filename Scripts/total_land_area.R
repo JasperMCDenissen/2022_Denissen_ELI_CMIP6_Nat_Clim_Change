@@ -11,7 +11,7 @@ pdf(NULL)
 setwd('/Net/Groups/BGI/work_3/HydroBioClim/archive/Denissen_etal_2022_Nat_Clim_Change/')
 
 # from /RData
-load('RData/202112_dcorr_cmip6_10yr_no_evspsblveg_hurs.RData')
+load('RData/202112_dcorr_cmip6_10yr_no_evspsblveg_hurs_netrad.RData')
 
 # # from /testdir
 # load('testdir/202112_dcorr_cmip6_10yr_no_evspsblveg_hurs.RData')
